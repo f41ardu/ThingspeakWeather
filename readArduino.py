@@ -2,9 +2,9 @@
 
 #
 # --- thr 2017-07-11 physical::computing AG SGH / Holzgerlingen 
-# v 1.0
-
-# updateThinkspeak.py
+# v 1.1
+# 
+# readarduino.py
 # 
 # dependency: a library file containing the thingspeak api keys 
 # 'thingspeak_keys.py' containing eg:
@@ -35,6 +35,7 @@ def readlineCR(port):
     rv = ""
     while True:
         ch = port.read()
+        
         rv += ch
         if ch=='\r' or ch=='':
             return rv
@@ -59,7 +60,10 @@ while True:
 #    thingspeak_data['field7'] = data7
 #    thingspeak_data['field8'] = data8
 # ======================================================================
+
 # POST to thingspeak
     print(":: Thinkspeak POST:")
     thingspeak.post(TS_KEY, thingspeak_data)
-    time.sleep(20)
+    time.sleep(20)      
+    
+    
