@@ -1,8 +1,18 @@
+# -*- coding: utf-8 -*-
 # this is the library file that is imported by another python script
 # depends upon the python library
 # 'httplib' https://pypi.python.org/pypi/httplib2/0.9.1
 # and
 # 'urllib' https://docs.python.org/2/library/urllib.html
+
+# "THE WHISKEY-WARE LICENSE" (Revision ln(e))
+# <tom@hash-n-bush.de> schrieb diese Datei. Solange Sie diesen Vermerk
+# nicht entfernen, können Sie mit dieser Phyton Code machen was Sie wollen.
+# Dieser Quelltext ist frei, so wie "frei" in "Die Gedanken sind frei". 
+# Sollten wir uns eines Tages treffen und Sie denken, das ist es wert, dann
+# geben Sie mir einen Whisky aus. tom.#-n-bush
+#
+
 #
 # thr v1.0 2017-07-14
 #

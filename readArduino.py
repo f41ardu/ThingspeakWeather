@@ -1,5 +1,14 @@
 #!/usr/bin/pyhton
+# -*- coding: utf-8 -*-
 
+#
+# "THE WHISKEY-WARE LICENSE" (Revision ln(e))
+# <tom@hash-n-bush.de> schrieb diese Datei. Solange Sie diesen Vermerk
+# nicht entfernen, können Sie mit dieser Phyton Code machen was Sie wollen.
+# Dieser Quelltext ist frei, so wie "frei" in "Die Gedanken sind frei". 
+# Sollten wir uns eines Tages treffen und Sie denken, das ist es wert, dann
+# geben Sie mir einen Whisky aus. tom.#-n-bush
+#
 #
 # --- thr 2017-07-11 physical::computing AG SGH / Holzgerlingen 
 # v 1.1
