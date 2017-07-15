@@ -1,4 +1,4 @@
-#!/usr/bin/pyhton
+#!/usr/bin/env pyhton
 # -*- coding: utf-8 -*-
 
 #
@@ -10,8 +10,9 @@
 # geben Sie mir einen Whisky aus. tom.#-n-bush
 #
 #
-# --- thr 2017-07-11 physical::computing AG SGH / Holzgerlingen 
-# v 1.2
+
+# --- thr 2017-07-15 physical::computing AG SGH / Holzgerlingen 
+# v 1.3
 # Lesen und schreiben von mehren Datenfeldern
 # 
 # 
@@ -51,31 +52,43 @@ def readlineCR(port):
         if ch=='\r' or ch=='':
             return rv
 
-rcv = readlineCR(port)
+def readSensors():
+      
+    port.write("\r\n")
+    try: 
+       rcv = readlineCR(port)
+        
+       rcv.replace('\r','').replace('\n','').replace('\'','').replace('\'','').replace('\'','')
+       values = rcv.split(',')
+       # convet char to float
+       dust=ast.literal_eval(values[0])
+       voltage=ast.literal_eval(values[1])
 
-while True:
-#   port.write("\r\nSay something:")
-    rcv = readlineCR(port)
-    rcv.replace('\r','').replace('\n','').replace('\'','').replace('\'','').replace('\'','')
-    values = rcv.split(',')
-    dust=ast.literal_eval(values[0])
-    voltage=ast.literal_eval(values[1])
-    print((dust, voltage))
-    # ======================================================================
-# populate the thingspeak content dictionary
-    thingspeak_data['field1'] = dust
-    thingspeak_data['field2'] = voltage
-#    thingspeak_data['field3'] = data3
-#    thingspeak_data['field4'] = data4
-#    thingspeak_data['field5'] = data5
-#    thingspeak_data['field6'] = data6
-#    thingspeak_data['field7'] = data7
-#    thingspeak_data['field8'] = data8
-# ======================================================================
+       print((dust, voltage))
+       # ======================================================================
+       # populate the thingspeak content dictionary
+       thingspeak_data['field1'] = dust
+       thingspeak_data['field2'] = voltage
+       #    thingspeak_data['field3'] = data3
+       #    thingspeak_data['field4'] = data4
+       #    thingspeak_data['field5'] = data5
+       #    thingspeak_data['field6'] = data6
+       #    thingspeak_data['field7'] = data7
+       #    thingspeak_data['field8'] = data8
+       # ======================================================================
 
-# POST to thingspeak
-    print(":: Thinkspeak POST:")
-    thingspeak.post(TS_KEY, thingspeak_data)
-    time.sleep(20)      
+       # POST to thingspeak
+       
+       thingspeak.post(TS_KEY, thingspeak_data)
+            
+    except:
+        print ("Serial connection failed")
     
+# main program 
+if __name__ == "__main__":
+    readlineCR(port)
+    while True:
+        print(":: Thinkspeak POST:")
+        readSensors()
+        time.sleep(20)
     
