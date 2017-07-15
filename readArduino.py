@@ -11,7 +11,9 @@
 #
 #
 # --- thr 2017-07-11 physical::computing AG SGH / Holzgerlingen 
-# v 1.1
+# v 1.2
+# Lesen und schreiben von mehren Datenfeldern
+# 
 # 
 # readarduino.py
 # 
@@ -45,23 +47,24 @@ def readlineCR(port):
     while True:
         ch = port.read()
         
-        rv += ch
+        rv += ch.decode('ascii')
         if ch=='\r' or ch=='':
             return rv
 
 rcv = readlineCR(port)
 
 while True:
-#    port.write("\r\nSay something:")
+#   port.write("\r\nSay something:")
     rcv = readlineCR(port)
     rcv.replace('\r','').replace('\n','').replace('\'','').replace('\'','').replace('\'','')
-    dust=ast.literal_eval(rcv)
-#    dustSum=dustSum
-    print((dust))
+    values = rcv.split(',')
+    dust=ast.literal_eval(values[0])
+    voltage=ast.literal_eval(values[1])
+    print((dust, voltage))
     # ======================================================================
 # populate the thingspeak content dictionary
     thingspeak_data['field1'] = dust
-#    thingspeak_data['field2'] = data2
+    thingspeak_data['field2'] = voltage
 #    thingspeak_data['field3'] = data3
 #    thingspeak_data['field4'] = data4
 #    thingspeak_data['field5'] = data5

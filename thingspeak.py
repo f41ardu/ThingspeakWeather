@@ -39,9 +39,9 @@ def post(key, content):
         conn.request("POST", "/update", params, headers)
         response = conn.getresponse()
 #        print params
-        print response.status, response.reason
+        print (response.status, response.reason)
         data = response.read()
         conn.close()
     # error connection failed    
     except:
-        print "connection failed"             
+        print ("connection failed")             

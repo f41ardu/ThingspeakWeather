@@ -30,7 +30,9 @@ void loop() {
   Serial.print(" - Dust Density: ");
 */
   if ( DustSensor.raw() >= 0.0 ) 
-  Serial.println(100.0 * DustSensor.density(),4); // unit: mg/m3
+  Serial.print(100.0 * DustSensor.density(),4); // unit: mg/m3
+  Serial.print(",");
+  Serial.println(DustSensor.voltage(),4); // unit: Volt
 
   delay(1000);
 }
