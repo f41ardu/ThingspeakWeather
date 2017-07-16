@@ -4,7 +4,7 @@
 #
 # "THE WHISKEY-WARE LICENSE" (Revision ln(e))
 # <tom@hash-n-bush.de> schrieb diese Datei. Solange Sie diesen Vermerk
-# nicht entfernen, können Sie mit dieser Phyton Code machen was Sie wollen.
+# nicht entfernen, können Sie mit diesem Phyton Code machen was Sie wollen.
 # Dieser Quelltext ist frei, so wie "frei" in "Die Gedanken sind frei". 
 # Sollten wir uns eines Tages treffen und Sie denken, das ist es wert, dann
 # geben Sie mir einen Whisky aus. tom.#-n-bush
@@ -21,6 +21,7 @@
 # dependency: a library file containing the thingspeak api keys 
 # 'thingspeak_keys.py' containing eg:
 # RASPBERRY_PI2  = "KEYABCXYZETECETC"
+# 
 # thr / 2017-07-11
 
 # ======================================================================
@@ -87,6 +88,7 @@ def readSensors():
 # main program 
 if __name__ == "__main__":
     readlineCR(port)
+    print("Start :: Thinkspeak POST:")
     while True:
         print(":: Thinkspeak POST:")
         readSensors()
