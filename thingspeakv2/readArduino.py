@@ -39,7 +39,7 @@ thingspeak_data     = {}
 
 # arduino
 PORT = '/dev/ttyUSB0'
-BAUD =  9600
+BAUD =  115200
 port = serial.Serial(PORT,BAUD)
 dustSum = 0.0
 counter= 1

@@ -18,7 +18,7 @@ double volt;
 GP2Y1010AU0F DustSensor(ledPower, measurePin);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop() {
@@ -29,8 +29,8 @@ void loop() {
   Serial.print(GP2Y1010AU0F.voltage(),4);
   Serial.print(" - Dust Density: ");
 */
-  if ( DustSensor.raw() >= 0.0 ) 
-  Serial.print(100.0 * DustSensor.density(),4); // unit: mg/m3
+  if ( DustSensor.raw() > 0.0 ) 
+  Serial.print(DustSensor.density(),4); // unit: mg/m3
   Serial.print(",");
   Serial.println(DustSensor.voltage(),4); // unit: Volt
 
