@@ -44,7 +44,7 @@ BAUD =  9600
 TIMEOUT = 0.5
 # =======================
 # open serial communication 
-serialPort = serial.Serial(PORT,BAUD,TIMEOUT)
+serialPort = serial.Serial(PORT,BAUD)
 
 # =====================
 # function readsensors 

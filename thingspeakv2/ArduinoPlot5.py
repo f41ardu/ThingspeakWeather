@@ -3,7 +3,8 @@ import ast
 import time
 import numpy as np
 import matplotlib.patches as mpatches
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 
 #=======================
 # import my local modules
@@ -15,6 +16,7 @@ TS_KEY              = thingspeak_keys.RASPBERRY_PI2
 thingspeak_data     = {}
 
 # Tutorial for Matplotlib
+
 # See http://www.labri.fr/perso/nrougier/teaching/matplotlib/ 
 
 # arduino
@@ -32,12 +34,19 @@ fig = plt.figure()
 ax1 = fig.add_subplot(2, 2, 1)
 ax1.set_xlabel('#')
 ax1.set_title('Feinstaub')
+ax1.xaxis.set_major_locator(ticker.MaxNLocator(5))
+ax1.xaxis.set_minor_locator(ticker.MaxNLocator(10))
+ax1.yaxis.set_major_locator(ticker.MaxNLocator(5))
+ax1.yaxis.set_minor_locator(ticker.MaxNLocator(10))
 line, = plt.plot(ydata, color ='r')
 plt.legend([line], ['mg/m^3'])
 plt.grid(True)
+
 ax2 = fig.add_subplot(2, 2, 2)
 ax2.set_xlabel('#')
 ax2.set_title('Sensorspannung')
+#ax2.xaxis.set_major_locator(ticker.MaxNLocator(5))
+#ax2.xaxis.set_minor_locator(ticker.MaxNLocator(10))
 line1, = plt.plot(ydata1, color = 'g')
 plt.legend([line1], ['Volt'])
 plt.grid(True)
