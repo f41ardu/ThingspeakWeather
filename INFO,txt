@@ -1,0 +1,4 @@
+Intall matplotlib via 
+
+pip install -U matplotlib
+
