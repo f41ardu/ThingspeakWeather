@@ -1,3 +1,4 @@
+import os
 import serial
 import ast
 import time
@@ -89,7 +90,7 @@ while i>1:
 
 # start data collection
 c = 0
-while True: 
+while True:
        # read from serial port 
        values = readSensors(port)
        if values:           
@@ -100,15 +101,19 @@ while True:
                dust=ast.literal_eval(values[0])
                voltage=ast.literal_eval(values[1])
                mdata = plotdata(dust,voltage)
-               print(mdata,c)
+               # print(mdata,c)
                if c > 50: 
                    # ==========================================
                    # populate the thingspeak content dictionary
+                   ostemp = os.popen('vcgencmd measure_temp').readline()
+                   temp = (ostemp.replace("temp=", "").replace("'C\n", ""))
+                   print(temp)
                    dust=mdata[0]/50.
                    voltage = mdata[1]/50.
                    print((dust, voltage))
                    thingspeak_data['field1'] = dust
                    thingspeak_data['field2'] = voltage
+                   thingspeak_data['field3'] = temp
                    # ==========================================
                    # update thingspeak 
                    thingspeak.post(TS_KEY, thingspeak_data)
