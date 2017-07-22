@@ -1,0 +1,7 @@
+Don't forget to add a file with your thingspeak API key
+ 
+thingspeak_keys.py
+
+Content:
+
+RASPBERRY_PI2  = "your API write key"
