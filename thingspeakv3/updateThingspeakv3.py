@@ -40,7 +40,7 @@ thingspeak_data     = {}
 # =======================
 # some definitions
 PORT = '/dev/ttyUSB0'
-BAUD =  9600
+BAUD =  115200
 TIMEOUT = 0.5
 # =======================
 # open serial communication 

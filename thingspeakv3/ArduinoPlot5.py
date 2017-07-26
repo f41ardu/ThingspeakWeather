@@ -1,28 +1,12 @@
-# -*- coding: utf-8 -*-
-# this is the library file that is imported by another python script
-# depends upon the python library
-# 'httplib' https://pypi.python.org/pypi/httplib2/0.9.1
-# and
-# 'urllib' https://docs.python.org/2/library/urllib.html
-
-# "THE WHISKEY-WARE LICENSE" (Revision ln(e))
-# <tom@hash-n-bush.de> schrieb diese Datei. Solange Sie diesen Vermerk
-# nicht entfernen, können Sie mit diesem Phyton Code machen was Sie wollen.
-# Dieser Quelltext ist frei, so wie "frei" in "Die Gedanken sind frei". 
-# Sollten wir uns eines Tages treffen und Sie denken, das ist es wert, dann
-# geben Sie mir einen Whisky aus. tom.#-n-bush
-#
-
-#
-# thr --- 2017-07-22
-#
-# version 1.1
-
+# version 1.0
 import os
 import serial
 import ast
 import time
 import numpy as np
+import matplotlib as mpl
+mpl.use('TkAgg')    #YAAA!!  this finally makes the Damn thing work
+import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
@@ -30,7 +14,7 @@ import matplotlib.ticker as ticker
 #=======================
 # import my local modules
 import thingspeak_keys
-import thingspeak
+import thingspeak3
 
 # thingspeak api key & data dictionary
 TS_KEY              = thingspeak_keys.RASPBERRY_PI2
@@ -60,16 +44,14 @@ ax1.xaxis.set_minor_locator(ticker.MaxNLocator(10))
 ax1.yaxis.set_major_locator(ticker.MaxNLocator(5))
 ax1.yaxis.set_minor_locator(ticker.MaxNLocator(10))
 line, = plt.plot(ydata, color ='r')
-plt.legend([line], ['$\mu$g/m^3'])
+plt.legend([line], ['mg/m^3'])
 plt.grid(True)
 
 ax2 = fig.add_subplot(2, 2, 2)
 ax2.set_xlabel('#')
 ax2.set_title('Sensorspannung')
-ax2.xaxis.set_major_locator(ticker.MaxNLocator(5))
-ax2.xaxis.set_minor_locator(ticker.MaxNLocator(10))
-ax2.yaxis.set_major_locator(ticker.MaxNLocator(5))
-ax2.yaxis.set_minor_locator(ticker.MaxNLocator(10))
+#ax2.xaxis.set_major_locator(ticker.MaxNLocator(5))
+#ax2.xaxis.set_minor_locator(ticker.MaxNLocator(10))
 line1, = plt.plot(ydata1, color = 'g')
 plt.legend([line1], ['Volt'])
 plt.grid(True)
@@ -78,7 +60,7 @@ def plotdata(dust,voltage):
     data=dust
     data1=voltage
     ymin = 0. #float(min(ydata))#-10
-    ymax = float(max(ydata))+20
+    ymax = float(max(ydata))+.1
     ax1.set_ylim(ymin, ymax)
     ydata.append(data)
     ymax = float(max(ydata1))+2
@@ -107,30 +89,26 @@ def readSensors(port):
 i = 100
 while i>1:
       values = readSensors(port)      
-      # print(values)
+      print(values)
       i=i-1
 
 # start data collection
-counter = 0
+c = 0
 while True:
        # read from serial port 
        values = readSensors(port)
        if values:           
-           try:
-               # =========================================
-               # increase counter 
-               counter = counter + 1
-               # =========================================   
+           try:            
+               # ==========================================   
                # convert to float
-               dust=1000.0 * ast.literal_eval(values[0]) # microgramm / m^3
+               c = c + 1  
+               dust=ast.literal_eval(values[0])
                voltage=ast.literal_eval(values[1])
-               # =========================================
-               # plot data
                mdata = plotdata(dust,voltage)
-               # print(ydata,counter)
-               # ==========================================
-                   # populate the thingspeak content dictionary 
-               if counter > 50: 
+               # print(mdata,c)
+               if c > 50: 
+                   # ==========================================
+                   # populate the thingspeak content dictionary
                    ostemp = os.popen('vcgencmd measure_temp').readline()
                    temp = (ostemp.replace("temp=", "").replace("'C\n", ""))
                    print(temp)
@@ -141,9 +119,9 @@ while True:
                    thingspeak_data['field2'] = voltage
                    thingspeak_data['field3'] = temp
                    # ==========================================
-                   # update thingspeak and reset counter
+                   # update thingspeak 
                    thingspeak.post(TS_KEY, thingspeak_data)
-                   counter = 0                 
+                   c = 0                 
            # ==============================================
            # no data from sensor
            except:

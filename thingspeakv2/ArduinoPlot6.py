@@ -44,53 +44,55 @@ thingspeak_data     = {}
 PORT = '/dev/ttyUSB0'
 BAUD =  115200
 port = serial.Serial(PORT,BAUD) 
-plt.ion() # set plot to animated
+
  
 ydata = [0] * 50
 ydata1 = [0] * 50
-#ax1=plt.axes()
+
  
 # make plot
-fig = plt.figure()
-ax1 = fig.add_subplot(2, 2, 1)
-ax1.set_xlabel('#')
-ax1.set_title('Feinstaub')
-ax1.xaxis.set_major_locator(ticker.MaxNLocator(5))
-ax1.xaxis.set_minor_locator(ticker.MaxNLocator(10))
-ax1.yaxis.set_major_locator(ticker.MaxNLocator(5))
-ax1.yaxis.set_minor_locator(ticker.MaxNLocator(10))
-line, = plt.plot(ydata, color ='r')
-plt.legend([line], ['$\mu$g/m^3'])
-plt.grid(True)
+#plt.ion() # set plot to animated
+#fig = plt.figure()
+#ax1 = fig.add_subplot(2, 2, 1)
+#ax1.set_xlabel('#')
+#ax1.set_title('Feinstaub')
+#ax1.xaxis.set_major_locator(ticker.MaxNLocator(5))
+#ax1.xaxis.set_minor_locator(ticker.MaxNLocator(10))
+#ax1.yaxis.set_major_locator(ticker.MaxNLocator(5))
+#ax1.yaxis.set_minor_locator(ticker.MaxNLocator(10))
+#line, = plt.plot(ydata, color ='r')
+#plt.legend([line], ['$\mu$g/m^3'])
+#plt.grid(True)
+#ax2 = fig.add_subplot(2, 2, 2)
+#ax2.set_xlabel('#')
+#ax2.set_title('Sensorspannung')
+#ax2.xaxis.set_major_locator(ticker.MaxNLocator(5))
+#ax2.xaxis.set_minor_locator(ticker.MaxNLocator(10))
+#ax2.yaxis.set_major_locator(ticker.MaxNLocator(5))
+#ax2.yaxis.set_minor_locator(ticker.MaxNLocator(10))
+#line1, = plt.plot(ydata1, color = 'g')
+#plt.legend([line1], ['Volt'])
+#plt.grid(True)
 
-ax2 = fig.add_subplot(2, 2, 2)
-ax2.set_xlabel('#')
-ax2.set_title('Sensorspannung')
-ax2.xaxis.set_major_locator(ticker.MaxNLocator(5))
-ax2.xaxis.set_minor_locator(ticker.MaxNLocator(10))
-ax2.yaxis.set_major_locator(ticker.MaxNLocator(5))
-ax2.yaxis.set_minor_locator(ticker.MaxNLocator(10))
-line1, = plt.plot(ydata1, color = 'g')
-plt.legend([line1], ['Volt'])
-plt.grid(True)
-
-def plotdata(dust,voltage):
+def sumdata(dust,voltage):
     data=dust
     data1=voltage
-    ymin = 0. #float(min(ydata))#-10
-    ymax = float(max(ydata))+20
-    ax1.set_ylim(ymin, ymax)
     ydata.append(data)
-    ymax = float(max(ydata1))+2
-    ax2.set_ylim(ymin, ymax)
     ydata1.append(data1)
     del ydata[0]
     del ydata1[0]
+    return sum(ydata), sum(ydata1)
+
+def plotdata():
+    ymin = 0. #float(min(ydata))#-10
+    ymax = float(max(ydata))+20
+    ax1.set_ylim(ymin, ymax)
+    ymax = float(max(ydata1))+2
+    ax2.set_ylim(ymin, ymax)
     line.set_xdata(np.arange(len(ydata)))
     line.set_ydata(ydata)  # update the data
     line1.set_ydata(ydata1)  # update the data1
     plt.draw() # update the plot
-    return sum(ydata), sum(ydata1)
 
 def readSensors(port):
     # =====================
@@ -102,14 +104,17 @@ def readSensors(port):
                print("Redline Error")
            return rcv.split(',')
  
+def lread():
 # =============================
 # ignore the first 100 readings
-i = 100
-while i>1:
-      values = readSensors(port)      
-      # print(values)
-      i=i-1
+    i = 100
+    while i>1:
+          values = readSensors(port)      
+          # print(values)
+          i=i-1
 
+
+lread()
 # start data collection
 counter = 0
 while True:
@@ -126,17 +131,17 @@ while True:
                voltage=ast.literal_eval(values[1])
                # =========================================
                # plot data
-               mdata = plotdata(dust,voltage)
+               mdata = sumdata(dust,voltage)
+               #plotdata()
                # print(ydata,counter)
                # ==========================================
                    # populate the thingspeak content dictionary 
                if counter > 50: 
                    ostemp = os.popen('vcgencmd measure_temp').readline()
                    temp = (ostemp.replace("temp=", "").replace("'C\n", ""))
-                   print(temp)
                    dust=mdata[0]/50.
                    voltage = mdata[1]/50.
-                   print((dust, voltage))
+                   print((dust, voltage,temp))
                    thingspeak_data['field1'] = dust
                    thingspeak_data['field2'] = voltage
                    thingspeak_data['field3'] = temp
